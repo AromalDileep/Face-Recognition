@@ -1,0 +1,32 @@
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+
+# Models (VERY IMPORTANT)
+models/*.h5
+models/**/*.h5
+# models/**/*.caffemodel
+# 
+# Face data & embeddings
+attendance/
+
+# Logs
+*.log
+
+# Environment / secrets
+service_account.json
+.env
+
+__pycache__/
+*.pkl
