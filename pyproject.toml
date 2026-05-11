@@ -14,4 +14,5 @@ dependencies = [
     "streamlit>=1.57.0",
     "streamlit-webrtc>=0.64.6",
     "tornado>=6.5.5",
+    "twilio>=8.0.0",
 ]

@@ -33,8 +33,26 @@ if "embeddings_db" not in st.session_state:
 enroller = Enroller(st.session_state.embeddings_db)
 recognizer = FaceRecognizer(st.session_state.embeddings_db)
 
+import os
+from twilio.rest import Client
+
+@st.cache_data
+def get_ice_servers():
+    """Use Twilio's TURN server if credentials are set, fallback to free STUN."""
+    try:
+        account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
+        auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
+        if account_sid and auth_token:
+            client = Client(account_sid, auth_token)
+            token = client.tokens.create()
+            return token.ice_servers
+    except Exception as e:
+        logging.warning(f"Failed to fetch Twilio TURN server: {e}")
+        
+    return [{"urls": ["stun:stun.l.google.com:19302"]}]
+
 RTC_CONFIGURATION = RTCConfiguration(
-    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+    {"iceServers": get_ice_servers()}
 )
 
 def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
