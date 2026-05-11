@@ -4,43 +4,58 @@ emoji: 👁
 colorFrom: blue
 colorTo: red
 sdk: streamlit
-sdk_version: "1.30.0"
+sdk_version: "1.57.0"
 app_file: app.py
 pinned: false
 ---
-# Face Recognition Attendance System
 
-A Windows-based application for automated attendance tracking using facial recognition. The system integrates with Google Sheets for logging attendance and communicates with an Arduino microcontroller to signal the start and stop of attendance sessions.
+# Live Face Recognition Web App
 
-## Project Structure Setup
+A real-time facial recognition application built with Streamlit and OpenCV. This application uses FaceNet for generating high-quality face embeddings and allows users to enroll faces, manage profiles, and perform live recognition directly through their web browser using WebRTC.
 
-To run this project, you need to set up a few essential files in their respective directories:
+## Features
 
-### 1. Credentials
+* **Face Enrollment**: Capture a photo from your webcam and register a name to save the face embedding to the local database.
+* **Live Recognition**: Real-time video processing using WebRTC to detect and recognize faces instantly.
+* **Manage Profiles**: View and delete existing enrolled profiles from the database.
 
-You will need a Google Service Account to interact with Google Sheets.
+## How to Run Locally
 
-1. Generate your service account key from the Google Cloud Console.
-2. Download the JSON file.
-3. Rename it to `service_account.json` and place it in the `credentials/` folder.
+Because this repository contains large Machine Learning models (such as `facenet.onnx` which is ~94MB), **do not use the "Download ZIP" button on GitHub**. Downloading the ZIP will only download a text pointer instead of the actual model, causing the app to crash. 
 
-### 2. Face Data
+Please follow these steps to set it up correctly:
 
-The system requires an `embeddings.pkl` file which contains the encoded face data for the registered users.
+### 1. Clone the Repository
+You must have Git and Git LFS installed on your system. Run these commands in your terminal:
+```bash
+git lfs install
+git clone https://github.com/AromalDileep/Face-Recognition.git
+cd Face-Recognition
+```
 
-- Place your `embeddings.pkl` file inside the `data/` folder.
+### 2. Install Dependencies
+Ensure you have Python 3.11 or higher installed. You can install the required packages using standard `pip` or `uv`:
 
-## Hardware Integration (Arduino)
+**Using standard pip:**
+```bash
+python -m venv venv
+# On Windows: venv\Scripts\activate
+# On Mac/Linux: source venv/bin/activate
+pip install -r requirements.txt
+```
 
-The application communicates via serial port with an Arduino (specifically the **Arduino Uno r3** model).
+**Using uv (Recommended):**
+```bash
+uv pip sync requirements.txt
+```
 
-- When an attendance session is started in the app, it sends a `start` signal to the Arduino.
-- When the session is stopped, it sends a `stop` signal to the Arduino.
+### 3. Run the Application
+Start the Streamlit server:
+```bash
+streamlit run app.py
+```
 
-## Usage
+The application will automatically open in your default web browser at `http://localhost:8501`.
 
-1. Ensure your Arduino Uno r3 is connected.
-2. Make sure your `credentials/service_account.json` and `data/embeddings.pkl` files are in place.
-3. Run the application on your Windows machine.
-4. Use the interface to start the attendance session (which signals the Arduino and begins facial recognition).
-5. Stop the session when finished.
+## Important Note on Cloud Deployment
+If you are deploying this to the public internet (like Hugging Face Spaces or Streamlit Cloud), the live camera feed (WebRTC) relies on STUN/TURN servers to penetrate firewalls. By default, it uses a free Google STUN server which works on most local networks, but for a 100% reliable internet deployment, you should configure a TURN server (like Twilio) in `app.py`.
