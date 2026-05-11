@@ -1,3 +1,13 @@
+---
+title: Face Recognition
+emoji: 👁
+colorFrom: blue
+colorTo: red
+sdk: streamlit
+sdk_version: "1.30.0"
+app_file: app.py
+pinned: false
+---
 # Face Recognition Attendance System
 
 A Windows-based application for automated attendance tracking using facial recognition. The system integrates with Google Sheets for logging attendance and communicates with an Arduino microcontroller to signal the start and stop of attendance sessions.
